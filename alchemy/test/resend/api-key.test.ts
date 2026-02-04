@@ -49,7 +49,7 @@ describe("ResendApiKey Resource", () => {
       expect(resource.id).toBe(originalResource.id);
       expect(resource.name).toBe(originalResource.name);
       expect(resource.permission).toBe(originalResource.permission);
-      expect(resource.token).toBe(originalResource.token);
+      expect(resource.token.unencrypted).toBe(originalResource.token.unencrypted);
       expect(resource.domainId).toBe(originalResource.domainId);
     } catch (err) {
       console.log(err);
