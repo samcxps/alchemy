@@ -208,6 +208,7 @@
     "yaml": "^2.0.0"
   },
   "peerDependencies": {
+    "resend": "^6.9.1",
     "@astrojs/cloudflare": "^12.6.4",
     "@aws-sdk/client-dynamodb": "^3.0.0",
     "@aws-sdk/client-iam": "^3.0.0",
