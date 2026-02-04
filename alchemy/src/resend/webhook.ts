@@ -3,9 +3,9 @@ import type { Context } from "../context";
 import { Resource } from "../resource";
 import type { Secret } from "../secret";
 import {
-    createResendClient,
-    ResendApiError,
-    type ResendClientOptions,
+  createResendClient,
+  ResendApiError,
+  type ResendClientOptions,
 } from "./client";
 
 const EMAIL_EVENTS = [

@@ -19,6 +19,8 @@ describe("ResendWebhook Resource", () => {
 
     const testWebhookId = `${BRANCH_PREFIX}-test-webhook`;
 
+    let createdWebhookId = "";
+
     try {
       // Create a test webhook
       webhook = await Webhook(testWebhookId, {
@@ -27,19 +29,21 @@ describe("ResendWebhook Resource", () => {
         status: "enabled",
       });
       expect(webhook.id).toBeTruthy();
+      createdWebhookId = webhook.id;
       expect(webhook.endpoint).toBe("https://example.com/webhook");
       expect(webhook.events).toEqual(["email.sent"]);
       expect(webhook.status).toBe("enabled");
       expect(webhook.signingSecret).toBeTruthy();
 
-
-      // Verify webhook was created by querying the Resend API directly 
+      // Verify webhook was created by querying the Resend API directly
       const getResponse = await client.webhooks.get(webhook.id);
       expect(getResponse.data?.id).toBe(webhook.id);
       expect(getResponse.data?.endpoint).toBe(webhook.endpoint);
       expect(getResponse.data?.events).toEqual(["email.sent"]);
       expect(getResponse.data?.status).toBe("enabled");
-      expect(getResponse.data?.signing_secret).toBe(webhook.signingSecret.unencrypted);
+      expect(getResponse.data?.signing_secret).toBe(
+        webhook.signingSecret.unencrypted,
+      );
 
       // Update the webhook
       webhook = await Webhook(testWebhookId, {
@@ -57,12 +61,25 @@ describe("ResendWebhook Resource", () => {
       const getResponseUpdated = await client.webhooks.get(webhook.id);
       expect(getResponseUpdated.data?.id).toBe(webhook.id);
       expect(getResponseUpdated.data?.endpoint).toBe(webhook.endpoint);
-      expect(getResponseUpdated.data?.events).toEqual(["email.sent", "email.delivered"]);
+      expect(getResponseUpdated.data?.events).toEqual([
+        "email.sent",
+        "email.delivered",
+      ]);
       expect(getResponseUpdated.data?.status).toBe("disabled");
-      expect(getResponseUpdated.data?.signing_secret).toBe(webhook.signingSecret.unencrypted);
-
+      expect(getResponseUpdated.data?.signing_secret).toBe(
+        webhook.signingSecret.unencrypted,
+      );
     } finally {
+      // destroy the webhook
       await destroy(scope);
+
+      // ensure the webhook id was set
+      expect(createdWebhookId).toBeTruthy();
+
+      // Verify webhook was deleted by querying the Resend API directly
+      const getResponseDeleted = await client.webhooks.get(createdWebhookId);
+      expect(getResponseDeleted.data).toBeNull();
+      expect(getResponseDeleted.error).toBeTruthy();
     }
   });
 });
