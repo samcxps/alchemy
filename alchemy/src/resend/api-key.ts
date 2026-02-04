@@ -38,28 +38,22 @@ export interface ResendApiKeyOptions extends ResendClientOptions {
  */
 export interface ResendApiKey {
   /**
-   * The Id in Resend of the created API key
+   * The Resend ID of the created API key
    */
   id: string;
 
   /**
    * The name of the API key
-   *
-   * @default `${app}-${stage}-${id}`
    */
   name: string;
 
   /**
    * The permission of the API key
-   *
-   * @default "full_access"
    */
   permission: "full_access" | "sending_access";
 
   /**
    * The domain ID of the API key
-   *
-   * @default undefined
    */
   domainId?: string;
 

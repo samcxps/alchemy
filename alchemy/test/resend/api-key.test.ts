@@ -3,7 +3,7 @@ import { alchemy } from "../../src/alchemy.ts";
 import { destroy } from "../../src/destroy.ts";
 import { createResendClient } from "../../src/resend";
 import type { ResendApiKey } from "../../src/resend/api-key.ts";
-import * as ResendProvider from "../../src/resend/api-key.ts";
+import { ApiKey } from "../../src/resend/api-key.ts";
 import "../../src/test/vitest";
 import { BRANCH_PREFIX } from "../util.ts";
 
@@ -21,7 +21,7 @@ describe("ResendApiKey Resource", () => {
 
     try {
       // create resource
-      resource = await ResendProvider.ApiKey(testId);
+      resource = await ApiKey(testId);
       const originalResource = resource;
 
       expect(resource.id).toBeTruthy();
@@ -40,7 +40,7 @@ describe("ResendApiKey Resource", () => {
       expect(createdResource?.id).toBe(resource?.id);
 
       // api key does not support updating, so lets make sure no changes are made if we try
-      resource = await ResendProvider.ApiKey(testId, {
+      resource = await ApiKey(testId, {
         name: "updated-api-key",
         permission: "sending_access",
       });
